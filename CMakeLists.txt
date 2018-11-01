@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(flea3)
 
 find_package(catkin REQUIRED COMPONENTS
-    roscpp nodelet camera_base dynamic_reconfigure message_generation # std_msgs
+    roscpp nodelet camera_base dynamic_reconfigure message_generation sensor_msgs cv_bridge image_transport std_msgs
     )
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
@@ -19,10 +19,13 @@ generate_dynamic_reconfigure_options(cfg/Flea3Dyn.cfg)
 #    )
 #generate_messages(DEPENDENCIES std_msgs)
 
+add_service_files(FILES Setshuttertime.srv)
+generate_messages(DEPENDENCIES std_msgs)
+
 catkin_package(
     INCLUDE_DIRS include
     LIBRARIES ${PROJECT_NAME}
-    CATKIN_DEPENDS roscpp nodelet camera_base dynamic_reconfigure
+    CATKIN_DEPENDS roscpp nodelet camera_base dynamic_reconfigure message_generation sensor_msgs cv_bridge image_transport std_msgs 
     message_runtime # std_msgs
     DEPENDS FlyCapture2
     )
@@ -40,6 +43,7 @@ add_library(${PROJECT_NAME}
     src/single/single_node.cpp
     src/stereo/stereo_node.cpp
     src/single/single_nodelet.cpp
+    src/single_/single_node_.cpp
     )
 target_link_libraries(
     ${PROJECT_NAME}
@@ -62,6 +66,18 @@ target_link_libraries(${PROJECT_NAME}_list_cameras ${PROJECT_NAME})
 
 add_executable(${PROJECT_NAME}_async_trigger src/flycapture/async_trigger.cpp)
 target_link_libraries(${PROJECT_NAME}_async_trigger ${PROJECT_NAME})
+
+#add_executable(${PROJECT_NAME}_software_trigger src/software_trigger.cpp)
+#target_link_libraries(${PROJECT_NAME}_software_trigger ${PROJECT_NAME})
+
+#add_executable(${PROJECT_NAME}_trigger src/trigger.cpp)
+#target_link_libraries(${PROJECT_NAME}_trigger ${PROJECT_NAME})
+
+add_executable(${PROJECT_NAME}_trigger src/single_/single_main_.cpp)
+target_link_libraries(${PROJECT_NAME}_trigger ${PROJECT_NAME})
+
+add_executable(${PROJECT_NAME}_srv_test src/stereo/srv_test.cpp)
+target_link_libraries(${PROJECT_NAME}_srv_test ${PROJECT_NAME})
 
 install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_single_node
   ${PROJECT_NAME}_stereo_node ${PROJECT_NAME}_list_cameras

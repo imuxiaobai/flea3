@@ -6,3 +6,4 @@ float32 brightness
 float32 exposure_value
 uint32 white_balance_blue
 uint32 white_balance_red
+

@@ -1,10 +1,13 @@
 <launch>
+
+    <include file = "$(find imu_3dm_gx4)/launch/imu.launch">
+    </include> 
     <!-- Common Interface -->
-    <arg name="rate" default="7.5"/>
+    <arg name="rate" default="20"/>
 
     <!-- Camera Settings -->
-    <arg name="left" default="15322735"/>
-    <arg name="right" default="15322733"/>
+    <arg name="left" default="18388615"/>
+    <arg name="right" default="18388619"/>
     <arg name="left_camera_name" default="pg_$(arg left)"/>
     <arg name="right_camera_name" default="pg_$(arg right)"/>
     <arg name="left_calib_url" default="file://${ROS_HOME}/camera_info/$(arg left_camera_name).yaml"/>
@@ -16,20 +19,25 @@
 
     <arg name="width" default="0"/>
     <arg name="height" default="0"/>
-    <arg name="video_mode" default="23"/>
-    <arg name="pixel_format" default="22"/>
+    <arg name="video_mode" default="16"/>
+    <arg name="pixel_format" default="31"/>
     <arg name="exposure" default="true"/>
     <arg name="auto_exposure" default="true"/>
-    <arg name="exposure_value" default="1.0"/>
-    <arg name="auto_shutter" default="true"/>
-    <arg name="shutter_ms" default="10.0"/>
-    <arg name="auto_gain" default="true"/>
-    <arg name="gain_db" default="0.0"/>
-    <arg name="trigger_source" default="7"/>
+    <!-- <arg name="auto_exposure" default="false"/> -->
+    <arg name="exposure_value" default="0.0"/>
+    <!-- <arg name="auto_shutter" default="true"/> -->
+    <arg name="auto_shutter" default="false"/>
+    <arg name="shutter_ms" default="12.0"/>
+    <!-- <arg name="auto_gain" default="true"/> -->
+    <arg name="auto_gain" default="false"/>
+    <arg name="gain_db" default="15.0"/>
+    <arg name="trigger_source" default="-1"/>
     <arg name="trigger_polarity" default="0"/>
-    <arg name="strobe_control" default="-1"/>
+    <arg name="strobe_control" default="7"/>
     <arg name="strobe_polarity" default="0"/>
-    <arg name="white_balance" default="false"/>
+    <!-- <arg name="white_balance" default="false"/> -->
+    <arg name="white_balance" default="true"/>
+    <!-- <arg name="auto_white_balance" default="true"/> -->
     <arg name="auto_white_balance" default="false"/>
 
     <!-- Node Settings -->
@@ -67,33 +75,9 @@
     </node>
 
     <!-- Proc -->
-    <node if="$(arg proc)"
-        pkg="stereo_image_proc" type="stereo_image_proc"
-        name="stereo_image_proc" ns="$(arg camera)">
+    <node 
+        pkg="flea3" type="flea3_srv_test"
+        name="flea3_srv_test" output = "screen" >
     </node>
 
-    <!-- View -->
-    <arg name="image" default="image_rect"/>
-    <node if="$(arg view)"
-        pkg="image_view" type="stereo_view" name="viewer"
-        output="$(arg output)"
-        args="stereo:=$(arg camera) image:=$(arg image)">
-    </node>
-
-    <!-- Calib -->
-    <group if="$(arg calib)">
-        <arg name="pattern" default="chessboard"/>
-        <arg name="size"/>
-        <arg name="square"/>
-        <arg name="num_dist_coeff" default="2"/>
-        <node pkg="camera_calibration" type="cameracalibrator.py"
-            name="calibrator" output="screen"
-            args="-p $(arg pattern) -s $(arg size) -q $(arg square)
-            -k $(arg num_dist_coeff)
-            right:=/$(arg camera)/right/image_raw
-            left:=/$(arg camera)/left/image_raw
-            right_camera:=/$(arg camera)/right
-            left_camera:=/$(arg camera)/left">
-        </node>
-    </group>
 </launch>

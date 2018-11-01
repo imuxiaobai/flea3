@@ -9,23 +9,22 @@
   <arg name="camera" default="$(arg camera_name)"/>
   <arg name="frame_id" default="$(arg camera)"/>
   <arg name="calib_url" default="file://${ROS_HOME}/camera_info/$(arg camera_name).yaml"/>
-  <!-- arg name="calib_url" default="file://work/flea_ws/src/flea3/cfg/$(arg camera_name).yaml"/-->
   <arg name="fps" default="$(arg rate)"/>
 
   <arg name="width" default="0"/>
   <arg name="height" default="0"/>
   <arg name="video_mode" default="23"/>
-  <arg name="pixel_format" default="26"/>
+  <arg name="pixel_format" default="22"/>
   <arg name="exposure" default="true"/>
   <arg name="auto_exposure" default="true"/>
   <arg name="exposure_value" default="1.0"/>
   <arg name="auto_shutter" default="true"/>
-  <arg name="shutter_ms" default="2.0"/>
+  <arg name="shutter_ms" default="10.0"/>
   <arg name="auto_gain" default="true"/>
   <arg name="gain_db" default="0.0"/>
-  <arg name="trigger_source" default="7"/>
+  <arg name="trigger_source" default="3"/>
   <arg name="trigger_polarity" default="0"/>
-  <arg name="strobe_control" default="3"/>
+  <arg name="strobe_control" default="-1"/>
   <arg name="strobe_polarity" default="0"/>
   <arg name="white_balance" default="false"/>
   <arg name="auto_white_balance" default="false"/>
@@ -38,7 +37,7 @@
   <arg name="calib" default="false"/>
 
   <!-- Node -->
-  <node pkg="flea3" type="flea3_single_node" name="$(arg camera)" output="$(arg output)">
+  <node pkg="flea3" type="flea3_trigger" name="$(arg camera)" output="$(arg output)">
     <param name="identifier" type="string" value="$(arg serial)"/>
     <param name="frame_id" type="string" value="$(arg frame_id)"/>
     <param name="camera_name" type="string" value="$(arg camera_name)"/>

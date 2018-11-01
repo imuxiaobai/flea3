@@ -33,6 +33,7 @@ class Flea3Camera {
   double GetShutterTimeSec();
   void SetShutter(bool& auto_shutter, double& shutter_ms);
   void SetGain(bool& auto_gain, double& gain_db);
+  double GetGain();
   void SetEnableTimeStamps(bool tsOnOff);
  private:
   std::string AvailableDevice();

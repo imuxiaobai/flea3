@@ -348,6 +348,14 @@ void Flea3Camera::SetGain(bool& auto_gain, double& gain_db) {
   gain_db = prop.absValue;
 }
 
+double Flea3Camera::GetGain() {
+  const auto prop_type = GAIN;
+  // SetProperty(camera_, prop_type, tue, auto_gain, gain_db);
+  const auto prop = GetProperty(camera_, prop_type);
+  double gain_db = prop.absValue;
+  return gain_db;
+}
+
 void Flea3Camera::SetBrightness(double& brightness) {
   const auto prop_type = BRIGHTNESS;
   SetProperty(camera_, prop_type, true, false, brightness);
@@ -516,13 +524,13 @@ bool Flea3Camera::RequestSingle() {
 }
 
 double Flea3Camera::GetShutterTimeSec() {
-  if (config_.auto_shutter) {
+  // if (config_.auto_shutter) {
     AbsValueConversion abs_val;
     // Register for abs_shutter_val, which is already in second
     camera_.ReadRegister(0x918, &abs_val.uint_val);
     return abs_val.float_val;
-  }
-  return config_.shutter_ms / 1000.0;
+  // }
+  // return config_.shutter_ms / 1000.0;
 }
 
 void Flea3Camera::SetEnableTimeStamps(bool tsOnOff) {
