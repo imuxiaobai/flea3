@@ -4,9 +4,20 @@
     <include file = "$(find imu_3dm_gx4)/launch/imu.launch">
     </include> 
     </group>
+
+    <group ns="lidar_ns">
+    <include file = "$(find lidar_lite_node)/launch/lidar_lite.launch">
+    </include> 
+    </group>
+ 
+    <group ns="filter_ns">
+    <include file = "$(find ukf_test)/launch/ukf_start.launch">
+    </include> 
+    </group>
+
     <!-- Common Interface -->
     <group ns="camera_ns">
-    <arg name="rate" default="20"/>
+    <arg name="rate" default="30"/>
 
     <!-- Camera Settings -->
     <arg name="left" default="18388615"/>
@@ -27,8 +38,8 @@
     <arg name="video_mode" default="23"/>
     <arg name="pixel_format" default="31"/>
     <arg name="exposure" default="true"/>
-    <arg name="auto_exposure" default="true"/>
-    <!-- <arg name="auto_exposure" default="false"/> -->
+    <!-- <arg name="auto_exposure" default="true"/> -->
+    <arg name="auto_exposure" default="false"/>
     <arg name="exposure_value" default="0.0"/>
     <!-- <arg name="auto_shutter" default="true"/> -->
     <arg name="auto_shutter" default="false"/>
