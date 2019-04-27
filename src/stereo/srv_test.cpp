@@ -49,30 +49,32 @@ void image_left_cb(const sensor_msgs::ImageConstPtr& image_left_msg) {
    } 
 
    // 1024 row          1280 col
-   cv::Mat image_before_median(20, 40, CV_8UC1);
-   cv::Mat image_after_median(20, 40, CV_8UC1);
+   cv::Mat image_before_median(24, 32, CV_8UC1);
+   cv::Mat image_after_median(24, 32, CV_8UC1);
 
   //  cv::medianBlur(cv_ptr->image, image_median, 7);
    int temp_brightness = 0;
    cv::Mat mat_mean, mat_stddev;
-   for(int i = 0; i <= 39; i++) {
+   for(int i = 0; i <= 31; i++) { //39
     //  for (int j = 0; j<= 21; j++) {
-     for (int j = 0; j<= 19; j++) {
+     for (int j = 0; j<= 23; j++) {//19
       //  image_before_median.at<uchar>(j , i) = cv_ptr->image.at<uchar>(16 + 32 * j, 16 + 32 * i) ;
       cv::meanStdDev(cv_ptr->image(cv::Range(1 + 32 * j, 32 + 32 * j), cv::Range(1 + 32 * i, 32 + 32 * i)), mat_mean, mat_stddev) ;
+      // cv::meanStdDev(cv_ptr->image(cv::Range(1 + 16 * j, 16 + 16 * j), cv::Range(1 + 16 * i, 16 + 16 * i)), mat_mean, mat_stddev) ;
       image_before_median.at<uchar>(j , i) =  mat_mean.at<double>(0, 0);
       //  temp_brightness += image_median.at<uchar>(16 + 32 * j, 16 + 32 * i);
      }
    }
   cv::medianBlur(image_before_median, image_after_median, 5);
   // image_after_median = image_before_median;
-   for(int i = 0; i <= 39; i++) {
+   for(int i = 0; i <= 31; i++) {
     //  for (int j = 0; j<= 21; j++) {
-     for (int j = 0; j<= 19; j++) {
+     for (int j = 0; j<= 23; j++) {
        temp_brightness += image_after_median.at<uchar>(j, i);
      }
    }
-   brightness_curr = temp_brightness / (40 * 20);
+   brightness_curr = temp_brightness / (32 * 24);
+  //  std::cout << "brightness_curr " << brightness_curr << std::endl;
    
   //  printf("brightness: %d \n", brightness_curr);
 
@@ -86,8 +88,11 @@ void image_left_cb(const sensor_msgs::ImageConstPtr& image_left_msg) {
   //  gain_curr = gain.data;
   gain_curr = 15.0f;
 
-  double shuttertime_next = 0.9 * shuttertime_curr * brightness_targ / (brightness_curr + 0.1f);
+  // double shuttertime_next = 0.9 * shuttertime_curr * brightness_targ / (brightness_curr + 0.1f);
+  double shuttertime_next = 1.5 * shuttertime_curr * brightness_targ / (brightness_curr + 0.1f);//use_for_least_shuttertime
   shuttertime_next = std::min(shuttertime_next, max_shuttertime);
+  // ROS_INFO("st_ne:%.2f",shuttertime_next);
+  // ROS_INFO("st_cr:%.2f",shuttertime_curr);
   double delta_shuttertime = std::abs(shuttertime_curr - shuttertime_next);
 
   double gain_st = 0.0f;
@@ -97,10 +102,8 @@ void image_left_cb(const sensor_msgs::ImageConstPtr& image_left_msg) {
     gain_st = -1.0f;
   }
   // ROS_INFO("dst:  %.2f",delta_shuttertime);
-  // ROS_INFO("st_ne:%.2f",shuttertime_next);
-  // ROS_INFO("st_cr:%.2f",shuttertime_curr);
-  if (delta_shuttertime > 1.75f) {
-    shuttertime_next = shuttertime_curr + std::min(delta_shuttertime, 1.95) * gain_st;
+  if (delta_shuttertime > 0.1f) { //0.1f 1.75  1.95
+    shuttertime_next = shuttertime_curr + std::min(delta_shuttertime, 0.12) * gain_st;//0.12
     flea3::Setshuttertime srv;
     srv.request.shuttertime = shuttertime_next;
     srv.request.gain = gain_curr;

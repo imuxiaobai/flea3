@@ -5,13 +5,8 @@
     </include> 
     </group>
 
-    <!-- <group ns="lidar_ns">
+    <group ns="lidar_ns">
     <include file = "$(find lidar_lite_node)/launch/lidar_lite.launch">
-    </include> 
-    </group> -->
- 
-    <group ns="filter_ns">
-    <include file = "$(find ukf_test)/launch/ukf_start.launch">
     </include> 
     </group>
 
@@ -20,8 +15,12 @@
     <arg name="rate" default="20"/>
 
     <!-- Camera Settings -->
-    <arg name="left" default="18388615"/>
-    <arg name="right" default="18388619"/>
+    <arg name="left" default="18583926"/>
+    <!-- <arg name="left" default="19056592"/> -->
+    <!-- <arg name="left" default="19056546"/> -->
+    <arg name="right" default="18583925"/>
+    <!-- <arg name="right" default="19056593"/> -->
+    <!-- <arg name="right" default="19056594"/> -->
     <arg name="left_camera_name" default="pg_$(arg left)"/>
     <arg name="right_camera_name" default="pg_$(arg right)"/>
     <arg name="left_calib_url" default="file://${ROS_HOME}/camera_info/$(arg left_camera_name).yaml"/>
@@ -33,28 +32,38 @@
     <arg name="frame_id" default="$(arg camera)"/>
     <arg name="fps" default="$(arg rate)"/>
 
-    <arg name="width" default="0"/>
-    <arg name="height" default="0"/>
+    <!-- <arg name="width" default="1280"/> -->
+    <arg name="width" default="1024"/>
+    <arg name="height" default="768"/>
+    <!-- <arg name="height" default="1024"/> -->
     <arg name="video_mode" default="23"/>
     <arg name="pixel_format" default="31"/>
     <arg name="exposure" default="true"/>
-    <arg name="auto_exposure" default="true"/>
+    <!-- <arg name="auto_exposure" default="true"/> -->
     <!-- <arg name="auto_exposure" default="false"/> -->
     <arg name="exposure_value" default="0.0"/>
-    <arg name="auto_shutter" default="true"/>
+    <!-- <arg name="exposure_value" default="1.0"/> -->
+    <!-- <arg name="auto_shutter" default="true"/> -->
     <!-- <arg name="auto_shutter" default="false"/> -->
-    <arg name="shutter_ms" default="16.0"/>
-    <arg name="auto_gain" default="true"/>
+    <arg name="shutter_ms" default="1.0"/>
+    <!-- <arg name="auto_gain" default="true"/> -->
     <!-- <arg name="auto_gain" default="false"/> -->
     <arg name="gain_db" default="15.0"/>
     <arg name="trigger_source" default="-1"/>
     <arg name="trigger_polarity" default="0"/>
     <arg name="strobe_control" default="7"/>
     <arg name="strobe_polarity" default="0"/>
-    <!-- <arg name="white_balance" default="false"/> -->
-    <arg name="white_balance" default="true"/>
+    <arg name="white_balance" default="false"/>
+    <!-- <arg name="white_balance" default="true"/> -->
     <!-- <arg name="auto_white_balance" default="true"/> -->
     <arg name="auto_white_balance" default="false"/>
+
+    <!-- <arg name="auto_exposure" default="true"/>
+    <arg name="auto_shutter" default="true"/>
+    <arg name="auto_gain" default="true"/> -->
+    <arg name="auto_exposure" default="false"/>
+    <arg name="auto_shutter" default="false"/>
+    <arg name="auto_gain" default="false"/>
 
     <!-- Node Settings -->
     <arg name="output" default="screen"/>
@@ -91,10 +100,10 @@
     </node>
 
     <!-- Proc -->
-    <!-- <node 
+    <node 
         pkg="flea3" type="flea3_srv_test"
         name="flea3_srv_test" output = "screen" >
-    </node> -->
+    </node>
     </group>
 
 </launch>
